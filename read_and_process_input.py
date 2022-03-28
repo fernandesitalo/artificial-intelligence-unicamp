@@ -40,6 +40,9 @@ class input_problem:
 				return False
 		return True
 
+	def get_map_letter_point(self):
+		return self.map_letter_point
+
 def read_and_process_input(archive_name):
 	f = open(archive_name,'r')
 
