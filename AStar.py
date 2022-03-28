@@ -11,11 +11,11 @@ class AStar:
 
     def initializePoints(self, source, destination):
 
-        x = self.map_letter_point[source].x
-        y = self.map_letter_point[source].y
+        x = self.map_letter_point[destination].x
+        y = self.map_letter_point[destination].y
 
-        xi = self.map_letter_point[destination].x
-        yi = self.map_letter_point[destination].y
+        xi = self.map_letter_point[source].x
+        yi = self.map_letter_point[source].y
 
         xf = self.map_letter_point["target"].x
         yf = self.map_letter_point["target"].y
