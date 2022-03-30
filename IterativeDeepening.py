@@ -1,7 +1,7 @@
 class ID:
-    def __init__(self, graph, maxDepth):
+    def __init__(self, graph, map_letter_point):
         self.graph = graph
-        self.maxDepth = maxDepth
+        self.map_letter_point = map_letter_point
 
     def __RevertPath__(self, path):
         list = []
@@ -13,33 +13,46 @@ class ID:
         list.reverse()
 
         return list
+
+    def __EuclidianDistance__(self, src, dst):
+        x1 = self.map_letter_point[src].x
+        y1 = self.map_letter_point[src].y
+        x2 = self.map_letter_point[dst].x
+        y2 = self.map_letter_point[dst].y
+
+        return ((x2-x1)**2 + (y2-y1)**2)**0.5
+
     def run(self):
-        stack = [('initial', 0)]
+
         visitations = 0
+        maxDepth = 0
         path = {}
-        flag = False
+        dst = {}
+        findSolution = False
+        dst['initial'] = 0
 
-        while len(stack) > 0:
-            topOfStack = stack.pop()
-            depth = topOfStack[1]
-            actualPosition = topOfStack[0]
+        while not findSolution:
 
-            if depth > self.maxDepth:
-                continue
+            maxDepth += 1
+            stack = [('initial', 0)]
+            while len(stack) > 0:
+                topOfStack = stack.pop()
+                depth = topOfStack[1]
+                actualPosition = topOfStack[0]
 
-            visitations += 1
-            if actualPosition == 'target':
-                flag = True
-                break
+                if depth > maxDepth:
+                    continue
+                visitations += 1
+                if actualPosition == 'target':
+                    findSolution = True
+                    break
 
-            for child in self.graph[actualPosition]:
-                stack.append((child, depth + 1))
+                for child in self.graph[actualPosition]:
+                    stack.append((child, depth + 1))
 
-                if child not in path:
-                    path[child] = actualPosition
+                    if child not in path:
+                        path[child] = actualPosition
+                        dst[child] = dst[actualPosition] + self.__EuclidianDistance__(actualPosition, child)
 
-        if flag:
-            path = self.__RevertPath__(path)
-            return (visitations, path)
-        else:
-            return None
+        path = self.__RevertPath__(path)
+        return (visitations, dst['target'], path)
